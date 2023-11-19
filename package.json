@@ -1,0 +1,34 @@
+{
+  "name": "@rd-utils/react",
+  "version": "0.0.1",
+  "description": "Common React utilities",
+  "main": "src/index.ts",
+  "scripts": {},
+  "keywords": [
+    "react",
+    "utilities",
+    "utils",
+    "state",
+    "slice",
+    "registry",
+    "emitter"
+  ],
+  "author": "Den Rostokin",
+  "license": "ISC",
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ],
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "@types/react": ">=16.9.0"
+  },
+  "devDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0",
+    "@types/react": ">=16.9.0",
+    "@types/react-dom": ">=16.9.0"
+  }
+}
