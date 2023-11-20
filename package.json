@@ -3,7 +3,12 @@
   "version": "0.0.1",
   "description": "Common React utilities",
   "main": "src/index.ts",
-  "scripts": {},
+  "module": "index.js",
+  "types": "@types/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && webpack --config ./cfg/webpack.prod.js",
+    "build:dev": "rimraf dist && webpack --config ./cfg/webpack.dev.js"
+  },
   "keywords": [
     "react",
     "utilities",
@@ -26,9 +31,17 @@
     "@types/react": ">=16.9.0"
   },
   "devDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0",
-    "@types/react": ">=16.9.0",
-    "@types/react-dom": ">=16.9.0"
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "rimraf": "^5.0.5",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-merge": "^5.9.0"
   }
 }

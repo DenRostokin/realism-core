@@ -1,1 +1,3 @@
-console.log('Hello, @rd-utils/react!');
+export const greeting = (name: number) => {
+  console.log(`Hello, ${name}!`);
+}
