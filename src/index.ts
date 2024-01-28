@@ -1,3 +1,3 @@
-export const greeting = (name: number) => {
-  console.log(`Hello, ${name}!`);
-}
+export * from './registry';
+export * from './emitter';
+export * from './types';
