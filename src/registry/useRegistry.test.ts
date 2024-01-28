@@ -13,10 +13,6 @@ describe('Registry', () => {
   });
 });
 
-describe('Registry subscriber', () => {
+describe('Registry subscriber', () => {});
 
-});
-
-describe('Registry emitter', () => {
-
-});
+describe('Registry emitter', () => {});

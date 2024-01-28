@@ -38,22 +38,19 @@ export const useRegistry = <R extends TRegistryType>(): IRegistry<R> => {
 
       return handlerKey;
     },
-    [],
+    []
   );
 
   const remove = useCallback(
     (eventName: TRegistryEvent, handlerKey: symbol) => {
       registry.current[eventName]?.delete(handlerKey);
     },
-    [],
+    []
   );
 
-  const clear = useCallback(
-    (eventName: TRegistryEvent) => {
-      delete registry.current[eventName];
-    },
-    []
-  )
+  const clear = useCallback((eventName: TRegistryEvent) => {
+    delete registry.current[eventName];
+  }, []);
 
   return useMemo(
     () => ({
@@ -62,17 +59,17 @@ export const useRegistry = <R extends TRegistryType>(): IRegistry<R> => {
       get,
       clear,
     }),
-    [add, remove, get, clear],
+    [add, remove, get, clear]
   );
 };
 
 export type TRegistrySubscriber<R extends TRegistryType> = (
   arg0: keyof R,
-  arg1: R[keyof R],
+  arg1: R[keyof R]
 ) => () => void;
 
 export const useRegistrySubscriber = <R extends TRegistryType>(
-  registry: IRegistry<R>,
+  registry: IRegistry<R>
 ) => {
   return useCallback<TRegistrySubscriber<R>>(
     (eventName, eventHandler) => {
@@ -82,7 +79,7 @@ export const useRegistrySubscriber = <R extends TRegistryType>(
         registry.remove(eventName, handlerKey);
       };
     },
-    [registry],
+    [registry]
   );
 };
 
@@ -92,7 +89,7 @@ export type TRegistryEmitter<R extends TRegistryType> = (
 ) => void;
 
 export const useRegistryEmitter = <R extends TRegistryType>(
-  registry: IRegistry<R>,
+  registry: IRegistry<R>
 ) => {
   return useCallback<TRegistryEmitter<R>>(
     (eventName, ...args) => {
@@ -100,6 +97,6 @@ export const useRegistryEmitter = <R extends TRegistryType>(
 
       handlers.forEach((handler) => handler(...args));
     },
-    [registry],
+    [registry]
   );
 };

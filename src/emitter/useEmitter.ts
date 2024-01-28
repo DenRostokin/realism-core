@@ -1,4 +1,5 @@
 // the next dependency is needed for the correct type declarations denerating. DO NOT REMOVE IT!
+// eslint-disable-next-line
 import { useEffect, useMemo, createContext, Context } from 'react';
 
 import {
@@ -8,12 +9,13 @@ import {
   TRegistryType,
   TRegistrySubscriber,
   // the next dependency is needed for the correct type declarations denerating. DO NOT REMOVE IT!
-  TRegistryEmitter
+  // eslint-disable-next-line
+  TRegistryEmitter,
 } from '../registry';
 import { noop } from '../utils';
 
 const useRenderingSubscriptionHook = <R extends TRegistryType>(
-  subscribe: TRegistrySubscriber<R>,
+  subscribe: TRegistrySubscriber<R>
 ) => {
   const useRenderingSubscription = (
     ...args: Parameters<TRegistrySubscriber<R>>
@@ -40,7 +42,7 @@ export const useEmitter = <R extends TRegistryType>() => {
       emit,
       useRenderingSubscription,
     }),
-    [subscribe, emit, useRenderingSubscription],
+    [subscribe, emit, useRenderingSubscription]
   );
 };
 
@@ -50,7 +52,9 @@ export const DEFAULT_EMITTER_CONTEXT = {
   emit: noop,
 };
 
-export type TEmitterType<R extends TRegistryType> = ReturnType<typeof useEmitter<R>>; 
+export type TEmitterType<R extends TRegistryType> = ReturnType<
+  typeof useEmitter<R>
+>;
 
 export const createEmitterContext = <R extends TRegistryType>() => {
   return createContext<TEmitterType<R>>(DEFAULT_EMITTER_CONTEXT);
