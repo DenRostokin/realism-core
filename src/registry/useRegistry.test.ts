@@ -23,7 +23,7 @@ describe('Registry', () => {
     expect(nonexistentHandlers).toHaveLength(0);
   });
 
-  it('registers single handler successfully', async () => {
+  it('registers a single handler successfully', async () => {
     const { result: registryRef } = renderHook(() => useRegistry());
 
     const areaKey = 'area';
@@ -108,8 +108,27 @@ describe('Registry', () => {
     expect(registryHandlers).toBeInstanceOf(Array);
     expect(registryHandlers).toHaveLength(0);
   });
+
+  it('clears all handlers successfully', async () => {
+    const { result: registryRef } = renderHook(() => useRegistry());
+
+    const areaKey = 'area';
+    const handler1 = jest.fn();
+    const handler2 = jest.fn();
+
+    registryRef.current.add(areaKey, handler1);
+    registryRef.current.add(areaKey, handler2);
+
+    let registryHandlers = registryRef.current.get(areaKey);
+
+    expect(registryHandlers).toBeInstanceOf(Array);
+    expect(registryHandlers).toHaveLength(2);
+
+    registryRef.current.clear(areaKey);
+
+    registryHandlers = registryRef.current.get(areaKey);
+
+    expect(registryHandlers).toBeInstanceOf(Array);
+    expect(registryHandlers).toHaveLength(0);
+  });
 });
-
-describe('Registry subscriber', () => {});
-
-describe('Registry emitter', () => {});

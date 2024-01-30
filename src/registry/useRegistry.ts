@@ -8,7 +8,7 @@ export interface IRegistry<R extends TRegistryType> {
   get<T extends keyof R>(arg0: T): R[T][];
   add(arg0: keyof R, arg1: R[keyof R]): symbol;
   remove(arg0: keyof R, arg1: symbol): void;
-  clear(arg0: symbol): void;
+  clear(arg0: keyof R): void;
 }
 
 export const useRegistry = <R extends TRegistryType>(): IRegistry<R> => {
@@ -60,43 +60,5 @@ export const useRegistry = <R extends TRegistryType>(): IRegistry<R> => {
       clear,
     }),
     [add, remove, get, clear]
-  );
-};
-
-export type TRegistrySubscriber<R extends TRegistryType> = (
-  arg0: keyof R,
-  arg1: R[keyof R]
-) => () => void;
-
-export const useRegistrySubscriber = <R extends TRegistryType>(
-  registry: IRegistry<R>
-) => {
-  return useCallback<TRegistrySubscriber<R>>(
-    (eventName, eventHandler) => {
-      const handlerKey = registry.add(eventName, eventHandler);
-
-      return () => {
-        registry.remove(eventName, handlerKey);
-      };
-    },
-    [registry]
-  );
-};
-
-export type TRegistryEmitter<R extends TRegistryType> = (
-  arg0: keyof R,
-  ...args: Parameters<R[keyof R]>
-) => void;
-
-export const useRegistryEmitter = <R extends TRegistryType>(
-  registry: IRegistry<R>
-) => {
-  return useCallback<TRegistryEmitter<R>>(
-    (eventName, ...args) => {
-      const handlers = registry.get(eventName);
-
-      handlers.forEach((handler) => handler(...args));
-    },
-    [registry]
   );
 };
