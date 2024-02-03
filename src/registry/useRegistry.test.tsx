@@ -1,6 +1,12 @@
-import { renderHook } from '@testing-library/react';
+import { FC, useEffect } from 'react';
+import { renderHook, render } from '@testing-library/react';
 
-import { useRegistry } from './useRegistry';
+import {
+  useRegistry,
+  IRegistry,
+  TRegistryType,
+  DEFAULT_REGISTRY_CONTEXT,
+} from './useRegistry';
 
 describe('Registry', () => {
   it('is cteated successfully', async () => {
@@ -10,6 +16,48 @@ describe('Registry', () => {
     expect(registryRef.current).toHaveProperty('remove');
     expect(registryRef.current).toHaveProperty('get');
     expect(registryRef.current).toHaveProperty('clear');
+  });
+
+  it('has a correct default context', () => {
+    expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('add');
+    expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('remove');
+    expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('get');
+    expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('clear');
+  });
+
+  it("doesn't rerender component after it's changing", async () => {
+    const registryRef = {} as IRegistry<TRegistryType>;
+    const effectFn = jest.fn();
+
+    const TestComponent: FC = () => {
+      const registry = useRegistry();
+
+      Object.assign(registryRef, registry);
+
+      useEffect(effectFn, [registry]);
+
+      return null;
+    };
+
+    render(<TestComponent />);
+
+    const areaKey = 'area';
+    const handler = jest.fn();
+
+    registryRef.add(areaKey, handler);
+
+    let registryHandlers = registryRef.get(areaKey);
+
+    expect(registryHandlers).toBeInstanceOf(Array);
+    expect(registryHandlers).toHaveLength(1);
+
+    registryRef.clear(areaKey);
+
+    registryHandlers = registryRef.get(areaKey);
+
+    expect(registryHandlers).toBeInstanceOf(Array);
+    expect(registryHandlers).toHaveLength(0);
+    expect(effectFn.mock.calls).toHaveLength(1);
   });
 
   it('returns an empty array for unregistered handlers', async () => {

@@ -62,3 +62,10 @@ export const useRegistry = <R extends TRegistryType>(): IRegistry<R> => {
     [add, remove, get, clear]
   );
 };
+
+export const DEFAULT_REGISTRY_CONTEXT: IRegistry<TRegistryType> = {
+  add: () => Symbol('Empty handler key'),
+  get: () => [],
+  remove: () => undefined,
+  clear: () => undefined,
+};
