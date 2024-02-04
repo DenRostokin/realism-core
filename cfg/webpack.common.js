@@ -13,6 +13,7 @@ export default {
     registry: path.resolve(__dirname, '../src/registry/index.ts'),
     emitter: path.resolve(__dirname, '../src/emitter/index.ts'),
     common: path.resolve(__dirname, '../src/common/index.ts'),
+    slice: path.resolve(__dirname, '../src/slice/index.ts'),
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -66,5 +67,6 @@ export default {
     registry: './registry.js',
     emitter: './emitter.js',
     common: './common.js',
+    slice: './slice.js',
   },
 };
