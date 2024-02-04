@@ -2,20 +2,20 @@
 // eslint-disable-next-line
 import { useEffect, useMemo, createContext, Context, useCallback } from 'react';
 
-import { useRegistry, TRegistryType } from '../registry';
+import { useRegistry, TRegistryContent } from '../registry';
 import { noop } from '../utils';
 
-export type TSubscribe<R extends TRegistryType> = (
+export type TSubscribe<R extends TRegistryContent> = (
   arg0: keyof R,
   arg1: R[keyof R]
 ) => () => void;
 
-export type TEmit<R extends TRegistryType> = (
+export type TEmit<R extends TRegistryContent> = (
   arg0: keyof R,
   ...args: Parameters<R[keyof R]>
 ) => void;
 
-const useRenderingSubscriptionHook = <R extends TRegistryType>(
+const useRenderingSubscriptionHook = <R extends TRegistryContent>(
   subscribe: TSubscribe<R>
 ) => {
   const useRenderingSubscription = (...args: Parameters<TSubscribe<R>>) => {
@@ -29,7 +29,7 @@ const useRenderingSubscriptionHook = <R extends TRegistryType>(
   return useMemo(() => useRenderingSubscription, []); // eslint-disable-line
 };
 
-export const useEmitter = <R extends TRegistryType>() => {
+export const useEmitter = <R extends TRegistryContent>() => {
   const registry = useRegistry<R>();
 
   const subscribe = useCallback<TSubscribe<R>>(
@@ -65,15 +65,25 @@ export const useEmitter = <R extends TRegistryType>() => {
 };
 
 export const DEFAULT_EMITTER_CONTEXT = {
-  subscribe: () => noop,
-  useRenderingSubscription: noop,
-  emit: noop,
+  subscribe: () => {
+    console.warn(
+      'Default "subscribe" method is used! Pass the emitter context for real emitter using'
+    );
+
+    return noop;
+  },
+  useRenderingSubscription: () => {
+    console.warn(
+      'Default "useRenderingSubscription" method is used! Pass the emitter context for real emitter using'
+    );
+  },
+  emit: () => {
+    console.warn(
+      'Default "emit" method is used! Pass the emitter context for real emitter using'
+    );
+  },
 };
 
-export type TEmitter<R extends TRegistryType> = ReturnType<
+export type TEmitter<R extends TRegistryContent> = ReturnType<
   typeof useEmitter<R>
 >;
-
-export const createEmitterContext = <R extends TRegistryType>() => {
-  return createContext<TEmitter<R>>(DEFAULT_EMITTER_CONTEXT);
-};
