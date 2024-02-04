@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "declaration": true,
-    "declarationDir": "dist/@types"
+    "declarationDir": "dist/@types",
+    "baseUrl": "src",
   },
   "include": ["src/**/*"],
   "exclude": ["dist/**/*"]

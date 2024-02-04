@@ -1,13 +1,22 @@
-const path = require("path");
-const webpack = require("webpack");
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
+import path from 'path';
+import { fileURLToPath } from 'url';
+import webpack from 'webpack';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 
-module.exports = {
-  entry: path.resolve(__dirname, '../src/index.ts'),
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
+  entry: {
+    index: path.resolve(__dirname, '../src/index.ts'),
+    registry: path.resolve(__dirname, '../src/registry/index.ts'),
+    emitter: path.resolve(__dirname, '../src/emitter/index.ts'),
+    common: path.resolve(__dirname, '../src/common/index.ts'),
+  },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'index.js',
+    filename: '[name].js',
     library: {
       type: 'commonjs-static',
     },
@@ -23,15 +32,15 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, '../package.json')
+          from: path.resolve(__dirname, '../package.json'),
         },
         {
-          from: path.resolve(__dirname, '../README.md')
+          from: path.resolve(__dirname, '../README.md'),
         },
         {
-          from: path.resolve(__dirname, '../LICENCE')
+          from: path.resolve(__dirname, '../LICENCE'),
         },
-      ]
+      ],
     }),
   ],
   module: {
@@ -40,7 +49,7 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "ts-loader",
+          loader: 'ts-loader',
           options: {
             transpileOnly: true,
           },
@@ -49,10 +58,13 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", "..."],
+    extensions: ['.ts', '.tsx', '...'],
   },
   externals: {
-    'react': 'react',
+    react: 'react',
     'react-dom': 'react-dom',
-  }
+    registry: './registry.js',
+    emitter: './emitter.js',
+    common: './common.js',
+  },
 };

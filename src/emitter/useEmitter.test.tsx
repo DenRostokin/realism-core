@@ -8,7 +8,7 @@ import {
 import { renderHook, render } from '@testing-library/react';
 
 import { useEmitter, DEFAULT_EMITTER_CONTEXT, TEmitter } from './useEmitter';
-import { TRegistryContent } from '../registry';
+import { TRegistryContent } from 'registry';
 
 describe('Emitter', () => {
   it('is created successfully', () => {

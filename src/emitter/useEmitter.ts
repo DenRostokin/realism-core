@@ -2,8 +2,7 @@
 // eslint-disable-next-line
 import { useEffect, useMemo, createContext, Context, useCallback } from 'react';
 
-import { useRegistry, TRegistryContent } from '../registry';
-import { noop } from '../utils';
+import { useRegistry, TRegistryContent } from 'registry';
 
 export type TSubscribe<R extends TRegistryContent> = (
   arg0: keyof R,
@@ -70,7 +69,7 @@ export const DEFAULT_EMITTER_CONTEXT = {
       'Default "subscribe" method is used! Pass the emitter context for real emitter using'
     );
 
-    return noop;
+    return () => undefined;
   },
   useRenderingSubscription: () => {
     console.warn(
