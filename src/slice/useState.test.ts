@@ -52,27 +52,41 @@ const selectName = (state: TState) => state.name;
 const selectAge = (state: TState) => state.age;
 
 describe('UseState', () => {
-  it('is created successfully', () => {
+  it('creates a state successfully', () => {
     const { result: stateRef } = renderState();
 
     expect(stateRef.current).toHaveProperty('getState');
     expect(stateRef.current).toHaveProperty('actions');
     expect(stateRef.current).toHaveProperty('useSelector');
-    expect(stateRef.current.getState().name).toEqual('');
-    expect(stateRef.current.getState().age).toBeNull();
+    expect(stateRef.current.actions).toHaveProperty('setName');
+    expect(stateRef.current.actions).toHaveProperty('setAge');
+  });
+
+  it('initializes values correctly', () => {
+    const { result: stateRef } = renderState();
+
+    const { result: stateDataRef } = renderHook(() =>
+      stateRef.current.useSelector((state) => state)
+    );
 
     const { result: nameRef } = renderHook(() =>
       stateRef.current.useSelector(selectName)
     );
+
     const { result: ageRef } = renderHook(() =>
       stateRef.current.useSelector(selectAge)
     );
 
-    expect(nameRef.current).toEqual('');
-    expect(ageRef.current).toBeNull();
+    const state = stateRef.current.getState();
+
+    expect(stateDataRef.current).toEqual(state);
+    expect(nameRef.current).toEqual(state.name);
+    expect(ageRef.current).toEqual(state.age);
+    expect(state.name).toEqual('');
+    expect(state.age).toBeNull();
   });
 
-  it('is updated successfully', () => {
+  it('updates values correctly', () => {
     const effectFn = jest.fn();
 
     const { result: stateRef } = renderState();
@@ -178,7 +192,7 @@ describe('UseState', () => {
     expect(stateFn.mock.calls).toHaveLength(1);
   });
 
-  xit("doesn't rerender component in wich the state was created", () => {
+  xit("doesn't rerender a component in wich the state was created", () => {
     const stateFn = jest.fn();
 
     const { result: stateRef } = renderState({
