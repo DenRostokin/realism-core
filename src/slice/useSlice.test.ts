@@ -362,7 +362,7 @@ describe('UseSlice', () => {
     expect(sliceEffectFn.mock.calls).toHaveLength(1);
   });
 
-  xit("doesn't rerender a component in wich the slice was created", () => {
+  it("doesn't rerender a component in wich the slice was created", () => {
     const sliceRenderingFn = jest.fn();
 
     const { result: sliceRef } = renderSlice({

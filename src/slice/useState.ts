@@ -3,12 +3,10 @@ import {
   useMemo,
   useEffect,
   useRef,
-  useReducer,
   useState as useReactState,
 } from 'react';
 
 import { useEmitter } from 'emitter';
-import { useFirstRender } from 'common';
 import { TStateReducers, TAction, TStateActions } from 'types';
 
 export type TUseStateParams<
@@ -47,17 +45,15 @@ export const useState = <
 }: TUseStateParams<S, P>) => {
   const { emit, subscribe } = useEmitter<TStateRegistry<S>>();
   const reducer = useStateReducer(reducers);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const stateRef = useRef(state);
-  const firstRender = useFirstRender();
+  const stateRef = useRef(initialState);
 
-  useEffect(() => {
-    if (!firstRender.current) {
-      stateRef.current = state;
+  const dispatch = useCallback((action: TAction<keyof P, P[keyof P]>) => {
+    const newState = reducer(stateRef.current, action);
 
-      emit('changeState', state);
-    }
-  }, [state]); // eslint-disable-line
+    stateRef.current = newState;
+
+    emit('changeState', newState);
+  }, []); // eslint-disable-line
 
   const getState = useCallback(() => {
     return stateRef.current;

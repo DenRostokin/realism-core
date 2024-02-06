@@ -192,7 +192,7 @@ describe('UseState', () => {
     expect(stateFn.mock.calls).toHaveLength(1);
   });
 
-  xit("doesn't rerender a component in wich the state was created", () => {
+  it("doesn't rerender a component in wich the state was created", () => {
     const stateFn = jest.fn();
 
     const { result: stateRef } = renderState({
