@@ -14,8 +14,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "declaration": true,
-    "declarationDir": "dist/@types",
     "baseUrl": "src",
   },
   "include": ["src/**/*"],
