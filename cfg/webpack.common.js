@@ -27,7 +27,7 @@ export default {
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         configFile: path.resolve(__dirname, '../tsconfig.json'),
-        mode: 'write-dts',
+        // mode: 'write-dts',
       },
     }),
     new CopyPlugin({

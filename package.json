@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rimraf dist && webpack --config ./cfg/webpack.prod.js",
     "build:dev": "rimraf dist && webpack --config ./cfg/webpack.dev.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "npm run test -- --watch",
     "tsc": "tsc --noEmit",
     "lint": "eslint \"src/**/*.+(ts|tsx)\"",
