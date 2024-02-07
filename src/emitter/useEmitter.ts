@@ -1,6 +1,4 @@
-// the next dependency is needed for the correct type declarations denerating. DO NOT REMOVE IT!
-// eslint-disable-next-line
-import { useEffect, useMemo, createContext, Context, useCallback } from 'react';
+import { useEffect, useMemo, useCallback } from 'react';
 
 import { useRegistry, TRegistryContent } from 'registry';
 

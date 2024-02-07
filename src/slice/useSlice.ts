@@ -6,9 +6,7 @@ import { TStateReducers, TStateActions } from 'types';
 import { useState } from './useState';
 import { useSelectors } from './useSelectors';
 import { generateKeyWithPrefix } from './utils';
-/* The dependency below is needed for the declarations correct building. DON'T REMOVE IT! */
-// eslint-disable-next-line
-import { TActionPayload, TSelectorHooks } from './types';
+import { TActionPayload } from './types';
 
 export const useSlice = <D extends Record<string, unknown>>(
   initialState: D,
