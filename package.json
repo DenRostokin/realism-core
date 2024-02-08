@@ -1,8 +1,8 @@
 {
-  "name": "@rd-utils/react",
+  "name": "@realism/core",
   "version": "0.0.1",
   "type": "module",
-  "description": "Common React utilities",
+  "description": "Common utilities for React and Redux",
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
@@ -21,10 +21,10 @@
     "prepare": "husky"
   },
   "keywords": [
+    "realism",
+    "realism-core",
     "react",
-    "utilities",
-    "utils",
-    "state",
+    "redux",
     "slice",
     "registry",
     "emitter"
