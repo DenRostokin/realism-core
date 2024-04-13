@@ -17,3 +17,16 @@ export type TStateReducers<
 export type TStateActions<P extends Record<string, unknown>> = {
   [Property in keyof P]: (arg0: P[Property]) => void;
 };
+
+export type TActionPayload<D extends Record<string, unknown>> = {
+  [P in keyof D as `set${Capitalize<string & P>}`]: D[P];
+} & {
+  setState: D;
+  cleanState: void;
+};
+
+export type TSelectorHooks<D extends Record<string, unknown>> = {
+  [P in keyof D as `use${Capitalize<string & P>}`]: () => D[P];
+} & {
+  useState: () => D;
+};

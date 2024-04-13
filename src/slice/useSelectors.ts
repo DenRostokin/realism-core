@@ -1,7 +1,9 @@
 import { useMemo, useCallback } from 'react';
 
+import { TSelectorHooks } from 'types';
+
 import { generateKeyWithPrefix } from './utils';
-import { TSelectorHooks, TUseSelector } from './types';
+import { TUseSelector } from './types';
 
 export const useSelectors = <D extends Record<string, unknown>>(
   initialState: D,

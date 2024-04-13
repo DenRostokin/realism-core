@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/ban-ts-comment */
 import { useMemo } from 'react';
 
-import { TStateReducers, TStateActions } from 'types';
+import { TStateReducers, TStateActions, TActionPayload } from 'types';
 
 import { useState } from './useState';
 import { useSelectors } from './useSelectors';
 import { generateKeyWithPrefix } from './utils';
-import { TActionPayload } from './types';
 
 export const useSlice = <D extends Record<string, unknown>>(
   initialState: D,
