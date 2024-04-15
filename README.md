@@ -95,6 +95,62 @@ Common selector `useState` is used for getting whole slice's data. That's why th
 
 Special selectors are formed by concatenating a word `use` with a name of the slice's data property. For example, if we have `name` property the selector has name `useName`. A special selector doesn't receive any arguments and returns value with a type of corresponding data property. Thus we have as many special selectors as there were properties in the slice's data object.
 
-`getState` is a pure function which returns a whole slice's data object. Data is actual on the moment of the `getStatte` calling. We shouldn't use `getState` inside of react component or react hooks because of it doesn't subscribe the component to slice's data changing. The method is used inside of callback or methods where we can't use react hooks.
+`getState` is a pure function which returns a whole slice's data object. Data is actual on the moment of the `getState` method calling. We shouldn't use `getState` inside of react component or react hooks because of it doesn't subscribe the component to slice's data changing. The method is used inside of callback or methods where we can't use react hooks.
 
 `Important!` A `slice` is an immutable object. It means that a `slice` doesn't rerender a component in which it was created after the slice's data changing. To rerender a component we have to use hooks from the slice's `selectors` object.
+
+## _2. useEmitter_
+
+The `useEmitter` is utility wich creates `emitter`. `Emitter` allows us to subscribe to methods and emit the methods anywhere in an react application. The emitter doesn't use browser events or similar abilities. Inside the emitter only react opportunities are used.
+
+When creating an `emitter` we need to specify a type of methods which we'll use. The type is an object with keys of event names and values of methods. Let's create an `emitter` with two methods:
+
+```ts
+import { FC, createContext, useEffect, useCallback, useContext } from 'react';
+import { useEmitter, DEFAULT_EMITTER_CONTEXT } from '@realism/core';
+
+const ComponentContext = createContext(DEFAULT_EMITTER_CONTEXT);
+
+type TComponentEmitter = {
+    send: (arg0: string) => void;
+}
+
+const Component: FC = () => {
+    const emitter = useEmitter<TComponentEmitter>();
+
+    const onSend = useCallback((value: string) => {
+        // Some logic of something sending
+    }, []);
+
+    useEffect(() => {
+        return emitter.subscribe('send', onSend);
+    }, [
+        emitter, // it doesn't matter because of the emmiter is an immutable object
+        onSend,
+    ]);
+
+    return (
+        <ComponentContext.Provider value={emitter}>
+            <ComponentChild />
+        </ComponentContext.Provider>
+    );
+};
+
+const ComponentChild: FC = () => {
+    const emitter = useContext(ComponentContext);
+
+    const handleClick = useCallback(() => {
+        emitter.emit('send', 'clicked');
+    }, [emitter]); // it doesn't matter because of the emmiter is an immutable object
+
+    return (
+        <button onClick={handleClick}>Click me</button>
+    );
+};
+```
+
+The `emitter` is an object which has three methods:
+
+- `subscribe` is used for regestring a method into the emitter. The `subscribe` method receives two arguments: name and method. It's possible to subscribe several methods using one name. The `subscribe` method returns a function which can be used for unsubscribing the method. That's why the unsubscribing function was returned from the effect's callback in the example above.
+- `emit` is used for calling a method which was specified in the `subscribe` method erlier. The `emit` method receives more than one arguments. First argument is required. It specifies a name of the subscribed method. Rest arguments are arguments of the subscried method. The `emit` method retuns nothing. It calls all methods which were subscribed by the `subscribe` method.
+- `useRenderingSubscription` is a react hook which is used for regestring a method into the emitter like `subscribe` method. But the `useRenderingSubscription` hook does it during the first component's rendering unlike the `subscribe` method which should be used only in the `useEffect` callback after the first rendering. It solves the problem when we want to use `emit` methods in the `useEffect` of child components. In this case the `useEffect` of the child component will be calld before the `useEffect` of the parent component.
