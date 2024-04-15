@@ -154,3 +154,47 @@ The `emitter` is an object which has three methods:
 - `subscribe` is used for regestring a method into the emitter. The `subscribe` method receives two arguments: name and method. It's possible to subscribe several methods using one name. The `subscribe` method returns a function which can be used for unsubscribing the method. That's why the unsubscribing function was returned from the effect's callback in the example above.
 - `emit` is used for calling a method which was specified in the `subscribe` method erlier. The `emit` method receives more than one arguments. First argument is required. It specifies a name of the subscribed method. Rest arguments are arguments of the subscried method. The `emit` method retuns nothing. It calls all methods which were subscribed by the `subscribe` method.
 - `useRenderingSubscription` is a react hook which is used for regestring a method into the emitter like `subscribe` method. But the `useRenderingSubscription` hook does it during the first component's rendering unlike the `subscribe` method which should be used only in the `useEffect` callback after the first rendering. It solves the problem when we want to use `emit` methods in the `useEffect` of child components. In this case the `useEffect` of the child component will be calld before the `useEffect` of the parent component.
+
+## _3. useRegistry_
+
+The `useRegistry` is utility which creates `registry`. `Registry` allow us to store functions by keys. The utility is used under the hood of the `useEmitter`. `Registry` is an javascript object which has several methods to save, get and remove functions by it's keys:
+
+- `add` method adds a function to the `registry` by a key. It receives two arguments: `key` and `function`. It's allowed to call multiple times the `add` method with the same key. All functions with the same key will be added to one array. The array will gotten by the key using method `get`. `add` method returns a key wich can be used to remove added function.
+- `get` method returns an array of functions which were added to the `registry` by the `add` method. The method receives a key wich was used in the `add` method. If we pass unknown key to the `get` method then empty array will be returned without any error.
+- `remove` method removes one function by a key which was returned by `add` method.
+- `clear` method removes all functions which were added by the `add` method. It receives a key which was specified in the `add` method.
+
+```ts
+import { FC, useCallback, useEffect } from 'react';
+import { useRegistry } from '@realism/core';
+
+const CLEAR_KEY = 'clear';
+
+const Component: FC = () => {
+    const registry = useRegistry();
+
+    const clearState = useCallback(() => {
+        // logic
+    }, []);
+
+    const handleCheck = useCallback(({ target }) => {
+        if (target.value) {
+            registry.add(CLEAR_KEY, clearState);
+        } else {
+            resistry.clear(CLEAR_KEY);
+        }
+    }, [clearState]);
+
+    useEffect(() => () => {
+        const clearingHandlers = registry.get(CLEAR_KEY);
+
+        clearingHandlers.forEach((handler) => {
+            handler();
+        });
+    }, [registry]); // it doesn't matter because of the emmiter is an immutable object
+
+    return (
+        <checkbox onChange={handleCheck}>Clear on quit</checkbox>
+    );
+};
+```
