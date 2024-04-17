@@ -1,6 +1,6 @@
 {
   "name": "@realism/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Core utilities for more rational appllication's data controll in the react world",
   "main": "index.js",
   "module": "index.js",
