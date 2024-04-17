@@ -198,3 +198,29 @@ const Component: FC = () => {
     );
 };
 ```
+
+## _4. useFirstRender_
+
+The `useFirstRender` is a react hook which can be helpfull if we want to do some logic only during the first component render. The hook returns react `ref` object. The `current` property of the object contains a flag about the first rendering.
+
+```ts
+import { FC, useEffect, useState } from 'react';
+import { useFirstRender } from '@realism/core';
+
+type TComponentProps = {
+  data: string;
+};
+
+const Component: FC<TComponentProps> = ({ data }) => {
+  const isFirstRender = useFirstRender();
+  const [localData, setLocalData] = useState(data);
+
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      setLocalData(data);
+    }
+  }, [data]);
+
+  return null;
+};
+```
