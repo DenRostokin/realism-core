@@ -1,3 +1,17 @@
+# Installation
+
+```sh
+npm i @realism/core
+```
+
+or
+
+```sh
+yarn add @realism/core
+```
+
+# Documentation
+
 The `@realism/core` library is a group of basic react-hooks for more rational appllication data controll in the `React`-world.
 
 ## _1. useSlice_
@@ -10,8 +24,6 @@ To create a `slice` we need to describe a type of the slice and set a default va
 import { FC, useEffect } from 'react';
 import { useSlice, TSlice } from '@realism/core';
 
-import { fetchPerson } from './api';
-
 type TPerson = {
   name: string;
   age: number;
@@ -22,17 +34,19 @@ const DEFAULT_PERSON: TPerson = {
   age: 0,
 };
 
+const fetchPerson = async () => ({
+  name: 'John',
+  age: 30,
+});
+
 const Person: FC = () => {
   const person = useSlice(DEFAULT_PERSON);
 
   useEffect(() => {
-    fetchPerson().then(({ name, age }) => {
-      person.actions.setState({
-        name,
-        age,
-      });
+    fetchPerson().then((data) => {
+      person.actions.setState(data);
     });
-  }, []);
+  }, [person]); // it doesn't matter because of the slice is an immutable object
 
   return <PersonCard person={person} />;
 };
@@ -45,7 +59,7 @@ const PersonCard: FC<TPersonCardProps> = ({ person }) => {
   const name = person.selectors.useName();
 
   if (!name) {
-    return null;
+    return <span>Loading...</span>;
   }
 
   return (
@@ -107,19 +121,19 @@ When creating an `emitter` we need to specify a type of methods which we'll use.
 
 ```ts
 import { FC, createContext, useEffect, useCallback, useContext } from 'react';
-import { useEmitter, DEFAULT_EMITTER_CONTEXT } from '@realism/core';
-
-const ComponentContext = createContext(DEFAULT_EMITTER_CONTEXT);
+import { useEmitter, DEFAULT_EMITTER_CONTEXT, TEmitter } from '@realism/core';
 
 type TComponentEmitter = {
     send: (arg0: string) => void;
 }
 
+const ComponentContext = createContext<TEmitter<TComponentEmitter>>(DEFAULT_EMITTER_CONTEXT);
+
 const Component: FC = () => {
     const emitter = useEmitter<TComponentEmitter>();
 
     const onSend = useCallback((value: string) => {
-        // Some logic of something sending
+      console.log({ value });
     }, []);
 
     useEffect(() => {
@@ -165,7 +179,7 @@ The `useRegistry` is utility which creates `registry`. `Registry` allow us to st
 - `clear` method removes all functions which were added by the `add` method. It receives a key which was specified in the `add` method.
 
 ```ts
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, ChangeEventHandler } from 'react';
 import { useRegistry } from '@realism/core';
 
 const CLEAR_KEY = 'clear';
@@ -174,16 +188,19 @@ const Component: FC = () => {
     const registry = useRegistry();
 
     const clearState = useCallback(() => {
-        // logic
+      console.log('Clearing...');
     }, []);
 
-    const handleCheck = useCallback(({ target }) => {
+    const handleCheck = useCallback<ChangeEventHandler<HTMLInputElement>>(({ target }) => {
         if (target.value) {
             registry.add(CLEAR_KEY, clearState);
         } else {
-            resistry.clear(CLEAR_KEY);
+            registry.clear(CLEAR_KEY);
         }
-    }, [clearState]);
+    }, [
+      registry, // it doesn't matter because of the registry is an immutable object
+      clearState
+    ]);
 
     useEffect(() => () => {
         const clearingHandlers = registry.get(CLEAR_KEY);
@@ -191,10 +208,10 @@ const Component: FC = () => {
         clearingHandlers.forEach((handler) => {
             handler();
         });
-    }, [registry]); // it doesn't matter because of the emmiter is an immutable object
+    }, [registry]); // it doesn't matter because of the registry is an immutable object
 
     return (
-        <checkbox onChange={handleCheck}>Clear on quit</checkbox>
+        <input type="checkbox" onChange={handleCheck} />
     );
 };
 ```
