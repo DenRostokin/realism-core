@@ -2,7 +2,7 @@
   "name": "@realism/core",
   "version": "0.0.1",
   "type": "module",
-  "description": "Common utilities for React and Redux",
+  "description": "Core utilities for more rational appllication's data controll in the react world",
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
@@ -24,13 +24,16 @@
     "realism",
     "realism-core",
     "react",
-    "redux",
     "slice",
     "registry",
     "emitter"
   ],
-  "author": "Den Rostokin",
-  "license": "ISC",
+  "author": "Den Rostokin rostokin.den@yandex.ru",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DenRostokin/realism-core.git"
+  },
+  "license": "MIT",
   "browserslist": [
     "> 0.5%",
     "last 2 versions",
