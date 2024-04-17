@@ -8,16 +8,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-  entry: {
-    index: path.resolve(__dirname, '../src/index.ts'),
-    registry: path.resolve(__dirname, '../src/registry/index.ts'),
-    emitter: path.resolve(__dirname, '../src/emitter/index.ts'),
-    common: path.resolve(__dirname, '../src/common/index.ts'),
-    slice: path.resolve(__dirname, '../src/slice/index.ts'),
-  },
+  entry: path.resolve(__dirname, '../src/index.ts'),
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: '[name].js',
+    filename: 'index.js',
     library: {
       type: 'commonjs-static',
     },
@@ -59,13 +53,15 @@ export default {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '...'],
+    alias: {
+      'registry': path.resolve(__dirname, '../src/registry'),
+      'emitter': path.resolve(__dirname, '../src/emitter'),
+      'common': path.resolve(__dirname, '../src/common'),
+      'slice': path.resolve(__dirname, '../src/slice'),
+    },
   },
   externals: {
     react: 'react',
     'react-dom': 'react-dom',
-    registry: './registry.js',
-    emitter: './emitter.js',
-    common: './common.js',
-    slice: './slice.js',
   },
 };
