@@ -1,4 +1,11 @@
-# Installation
+# Realism Core
+
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/DenRostokin/realism-core/test.yml)
+[![NPM Version](https://img.shields.io/npm/v/%40realism%2Fcore)](https://www.npmjs.com/package/@realism/core)
+[![NPM Downloads](https://img.shields.io/npm/dm/%40realism%2Fcore)](https://www.npmjs.com/package/@realism/core)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40realism%2Fcore)
+
+## Installation
 
 ```sh
 npm i @realism/core
@@ -10,11 +17,11 @@ or
 yarn add @realism/core
 ```
 
-# Documentation
+## Documentation
 
 The `@realism/core` library is a group of basic react-hooks for more rational appllication data controll in the `React`-world.
 
-## _1. useSlice_
+### _1. useSlice_
 
 The `useSlice` is a top level utility which creates `slice` of data with different hooks for it's control. `Slice` of data is a plain javascript object which can be passed as a component prop or through React context etc. It simplifies a control over one object unlike multiple separated states wich created via the `useState` hook from the React library.
 
@@ -113,7 +120,7 @@ Special selectors are formed by concatenating a word `use` with a name of the sl
 
 `Important!` A `slice` is an immutable object. It means that a `slice` doesn't rerender a component in which it was created after the slice's data changing. To rerender a component we have to use hooks from the slice's `selectors` object.
 
-## _2. useEmitter_
+### _2. useEmitter_
 
 The `useEmitter` is utility wich creates `emitter`. `Emitter` allows us to subscribe to methods and emit the methods anywhere in an react application. The emitter doesn't use browser events or similar abilities. Inside the emitter only react opportunities are used.
 
@@ -169,7 +176,7 @@ The `emitter` is an object which has three methods:
 - `emit` is used for calling a method which was specified in the `subscribe` method erlier. The `emit` method receives more than one arguments. First argument is required. It specifies a name of the subscribed method. Rest arguments are arguments of the subscried method. The `emit` method retuns nothing. It calls all methods which were subscribed by the `subscribe` method.
 - `useRenderingSubscription` is a react hook which is used for regestring a method into the emitter like `subscribe` method. But the `useRenderingSubscription` hook does it during the first component's rendering unlike the `subscribe` method which should be used only in the `useEffect` callback after the first rendering. It solves the problem when we want to use `emit` methods in the `useEffect` of child components. In this case the `useEffect` of the child component will be calld before the `useEffect` of the parent component.
 
-## _3. useRegistry_
+### _3. useRegistry_
 
 The `useRegistry` is utility which creates `registry`. `Registry` allow us to store functions by keys. The utility is used under the hood of the `useEmitter`. `Registry` is an javascript object which has several methods to save, get and remove functions by it's keys:
 
@@ -216,7 +223,7 @@ const Component: FC = () => {
 };
 ```
 
-## _4. useFirstRender_
+### _4. useFirstRender_
 
 The `useFirstRender` is a react hook which can be helpfull if we want to do some logic only during the first component render. The hook returns react `ref` object. The `current` property of the object contains a flag about the first rendering.
 
