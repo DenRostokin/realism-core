@@ -5,6 +5,6 @@ export default {
   testEnvironment: 'jsdom',
   moduleDirectories: ['node_modules', 'src'],
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  collectCoverageFrom: ['src/**/{!(index),}.{ts,tsx}'],
   coverageDirectory: 'coverage',
 }
