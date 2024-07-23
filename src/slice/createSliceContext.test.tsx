@@ -78,7 +78,11 @@ describe('CreateSliceContext', () => {
 
   it('pass a slice throught a context successfully', () => {
     const sliceRef = {} as TSlice<TPerson>;
-    const { Context } = createSliceContext(initialSlice);
+    const initialPerson: TPerson = {
+      name: 'Jane',
+      age: 23,
+    };
+    const { Context } = createSliceContext(initialPerson);
 
     const SliceConsumer: FC = () => {
       const slice = useContext(Context);
@@ -89,7 +93,7 @@ describe('CreateSliceContext', () => {
     };
 
     const SliceProvider: FC<PropsWithChildren> = ({ children }) => {
-      const slice = useSlice(initialSlice);
+      const slice = useSlice(initialPerson);
 
       return <Context.Provider value={slice}>{children}</Context.Provider>;
     };
@@ -101,5 +105,12 @@ describe('CreateSliceContext', () => {
     );
 
     validatePersonSlice(sliceRef);
+
+    const { result: nameRef } = renderHook(() => sliceRef.selectors.useName());
+
+    const { result: ageRef } = renderHook(() => sliceRef.selectors.useAge());
+
+    expect(nameRef.current).toEqual('Jane');
+    expect(ageRef.current).toEqual(23);
   });
 });
