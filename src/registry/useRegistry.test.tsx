@@ -25,10 +25,34 @@ describe('Registry', () => {
   });
 
   it('has a correct default context', () => {
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn);
+
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('add');
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('remove');
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('get');
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('clear');
+
+    const areaKey = 'area';
+    const handler = jest.fn();
+
+    const handleKey = DEFAULT_REGISTRY_CONTEXT.add(areaKey, handler);
+
+    expect(typeof consoleSpy.mock.calls[0][0]).toBe('string');
+    expect(typeof handleKey).toBe('symbol');
+
+    const handlersFromRegistry = DEFAULT_REGISTRY_CONTEXT.get(areaKey);
+
+    expect(typeof consoleSpy.mock.calls[1][0]).toBe('string');
+    expect(Array.isArray(handlersFromRegistry)).toBeTruthy();
+    expect(handlersFromRegistry).toHaveLength(0);
+
+    DEFAULT_REGISTRY_CONTEXT.remove(areaKey, handleKey);
+
+    expect(typeof consoleSpy.mock.calls[2][0]).toBe('string');
+
+    DEFAULT_REGISTRY_CONTEXT.clear(areaKey);
+
+    expect(typeof consoleSpy.mock.calls[3][0]).toBe('string');
   });
 
   it('passes context correctly', () => {

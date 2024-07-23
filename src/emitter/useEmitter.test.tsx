@@ -20,9 +20,29 @@ describe('Emitter', () => {
   });
 
   it('has a correct default context', () => {
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn);
+
     expect(DEFAULT_EMITTER_CONTEXT).toHaveProperty('subscribe');
     expect(DEFAULT_EMITTER_CONTEXT).toHaveProperty('useRenderingSubscription');
     expect(DEFAULT_EMITTER_CONTEXT).toHaveProperty('emit');
+
+    const eventName = 'event';
+    const handler = jest.fn();
+
+    const unsubscribe = DEFAULT_EMITTER_CONTEXT.subscribe(eventName, handler);
+
+    expect(typeof consoleSpy.mock.calls[0][0]).toBe('string');
+    expect(unsubscribe).toBeInstanceOf(Function);
+
+    DEFAULT_EMITTER_CONTEXT.emit(eventName);
+
+    expect(typeof consoleSpy.mock.calls[1][0]).toBe('string');
+
+    renderHook(() => {
+      DEFAULT_EMITTER_CONTEXT.useRenderingSubscription(eventName, handler);
+    });
+
+    expect(typeof consoleSpy.mock.calls[2][0]).toBe('string');
   });
 
   it('passes context correctly', () => {
