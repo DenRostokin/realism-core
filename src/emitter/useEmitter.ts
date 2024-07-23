@@ -61,7 +61,11 @@ export const useEmitter = <R extends TRegistryContent>() => {
   );
 };
 
-export const DEFAULT_EMITTER_CONTEXT = {
+export type TEmitter<R extends TRegistryContent> = ReturnType<
+  typeof useEmitter<R>
+>;
+
+export const DEFAULT_EMITTER_CONTEXT: TEmitter<TRegistryContent> = {
   subscribe: () => {
     console.warn(
       'Default "subscribe" method is used! Pass the emitter context for real emitter using'
@@ -80,7 +84,3 @@ export const DEFAULT_EMITTER_CONTEXT = {
     );
   },
 };
-
-export type TEmitter<R extends TRegistryContent> = ReturnType<
-  typeof useEmitter<R>
->;
