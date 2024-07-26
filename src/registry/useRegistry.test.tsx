@@ -1,17 +1,11 @@
-import {
-  FC,
-  useEffect,
-  useContext,
-  PropsWithChildren,
-  createContext,
-} from 'react';
+import { FC, useEffect, useContext, PropsWithChildren } from 'react';
 import { renderHook, render } from '@testing-library/react';
 
 import {
   useRegistry,
   TRegistry,
   TRegistryContent,
-  DEFAULT_REGISTRY_CONTEXT,
+  createRegistryContext,
 } from './useRegistry';
 
 describe('Registry', () => {
@@ -26,6 +20,7 @@ describe('Registry', () => {
 
   it('has a correct default context', () => {
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn);
+    const { CONTEXT_VALUE: DEFAULT_REGISTRY_CONTEXT } = createRegistryContext();
 
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('add');
     expect(DEFAULT_REGISTRY_CONTEXT).toHaveProperty('remove');
@@ -57,9 +52,8 @@ describe('Registry', () => {
 
   it('passes context correctly', () => {
     const registryRef = {} as TRegistry<TRegistryContent>;
-    const RegistryContext = createContext<TRegistry<TRegistryContent>>(
-      DEFAULT_REGISTRY_CONTEXT
-    );
+    const { Context: RegistryContext } =
+      createRegistryContext<TRegistryContent>();
 
     const RegistryProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
       const registry = useRegistry();

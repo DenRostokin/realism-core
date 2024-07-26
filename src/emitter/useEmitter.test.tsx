@@ -1,13 +1,7 @@
-import {
-  FC,
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-} from 'react';
+import { FC, PropsWithChildren, useContext, useEffect } from 'react';
 import { renderHook, render } from '@testing-library/react';
 
-import { useEmitter, DEFAULT_EMITTER_CONTEXT, TEmitter } from './useEmitter';
+import { useEmitter, TEmitter, createEmitterContext } from './useEmitter';
 import { TRegistryContent } from 'registry';
 
 describe('Emitter', () => {
@@ -21,6 +15,7 @@ describe('Emitter', () => {
 
   it('has a correct default context', () => {
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(jest.fn);
+    const { CONTEXT_VALUE: DEFAULT_EMITTER_CONTEXT } = createEmitterContext();
 
     expect(DEFAULT_EMITTER_CONTEXT).toHaveProperty('subscribe');
     expect(DEFAULT_EMITTER_CONTEXT).toHaveProperty('useRenderingSubscription');
@@ -47,9 +42,8 @@ describe('Emitter', () => {
 
   it('passes context correctly', () => {
     const emitterRef = {} as TEmitter<TRegistryContent>;
-    const EmitterContext = createContext<TEmitter<TRegistryContent>>(
-      DEFAULT_EMITTER_CONTEXT
-    );
+    const { Context: EmitterContext } =
+      createEmitterContext<TRegistryContent>();
 
     const EmitterProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
       const emitter = useEmitter();

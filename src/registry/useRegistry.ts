@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, createContext } from 'react';
 
 import { TBaseHandler } from 'types';
 
@@ -60,29 +60,35 @@ export type TRegistry<R extends TRegistryContent> = ReturnType<
   typeof useRegistry<R>
 >;
 
-export const DEFAULT_REGISTRY_CONTEXT: TRegistry<TRegistryContent> = {
-  add: () => {
-    console.warn(
-      'Default "add" method is used! Pass the registry context for real registry using'
-    );
+export const createRegistryContext = <R extends TRegistryContent>() => {
+  const CONTEXT_VALUE: TRegistry<R> = {
+    add: () => {
+      console.warn(
+        'Default "add" method is used! Pass the registry context for real registry using'
+      );
 
-    return Symbol('Registry handler');
-  },
-  get: () => {
-    console.warn(
-      'Default "get" method is used! Pass the registry context for real registry using'
-    );
+      return Symbol('Registry handler');
+    },
+    get: () => {
+      console.warn(
+        'Default "get" method is used! Pass the registry context for real registry using'
+      );
 
-    return [];
-  },
-  remove: () => {
-    console.warn(
-      'Default "remove" method is used! Pass the registry context for real registry using'
-    );
-  },
-  clear: () => {
-    console.warn(
-      'Default "clear" method is used! Pass the registry context for real registry using'
-    );
-  },
+      return [];
+    },
+    remove: () => {
+      console.warn(
+        'Default "remove" method is used! Pass the registry context for real registry using'
+      );
+    },
+    clear: () => {
+      console.warn(
+        'Default "clear" method is used! Pass the registry context for real registry using'
+      );
+    },
+  };
+
+  const Context = createContext(CONTEXT_VALUE);
+
+  return { CONTEXT_VALUE, Context };
 };

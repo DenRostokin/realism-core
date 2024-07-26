@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo, useCallback, createContext } from 'react';
 
 import { useRegistry, TRegistryContent } from 'registry';
 
@@ -65,22 +65,31 @@ export type TEmitter<R extends TRegistryContent> = ReturnType<
   typeof useEmitter<R>
 >;
 
-export const DEFAULT_EMITTER_CONTEXT: TEmitter<TRegistryContent> = {
-  subscribe: () => {
-    console.warn(
-      'Default "subscribe" method is used! Pass the emitter context for real emitter using'
-    );
+export const createEmitterContext = <R extends TRegistryContent>() => {
+  const CONTEXT_VALUE: TEmitter<R> = {
+    subscribe: () => {
+      console.warn(
+        'Default "subscribe" method is used! Pass the emitter context for real emitter using'
+      );
 
-    return () => undefined;
-  },
-  useRenderingSubscription: () => {
-    console.warn(
-      'Default "useRenderingSubscription" method is used! Pass the emitter context for real emitter using'
-    );
-  },
-  emit: () => {
-    console.warn(
-      'Default "emit" method is used! Pass the emitter context for real emitter using'
-    );
-  },
+      return () => undefined;
+    },
+    useRenderingSubscription: () => {
+      console.warn(
+        'Default "useRenderingSubscription" method is used! Pass the emitter context for real emitter using'
+      );
+    },
+    emit: () => {
+      console.warn(
+        'Default "emit" method is used! Pass the emitter context for real emitter using'
+      );
+    },
+  };
+
+  const Context = createContext(CONTEXT_VALUE);
+
+  return {
+    CONTEXT_VALUE,
+    Context,
+  };
 };
